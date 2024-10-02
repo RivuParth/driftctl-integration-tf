@@ -35,4 +35,4 @@ jobs:
 
       - name: Run Driftctl Scan
         run: |
-          driftctl scan --from tfstate://terraform.tfstate --to aws+tf
+          driftctl scan --from tfstate://terraform.tfstate 
