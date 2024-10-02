@@ -26,6 +26,9 @@ jobs:
           echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/config
           echo "region = ${AWS_REGION}" >> ~/.aws/config  # Add region to config
 
+          # Debugging: Print AWS configuration (DO NOT print sensitive values)
+          cat ~/.aws/config
+
       # Step 3: Download and Install Driftctl
       - name: Download Driftctl
         run: |
