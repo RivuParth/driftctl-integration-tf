@@ -28,7 +28,7 @@ jobs:
       - name: Download Driftctl binary
         run: |
           echo "Downloading Driftctl..."
-          curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64 || { echo "Failed to download Driftctl"; exit 1; }
+          curl -L https://github.com/snyk/driftctl/releases/latest/download/driftctl_linux_amd64 -o driftctl || { echo "Failed to download Driftctl"; exit 1; }
           if [ ! -f driftctl ]; then
             echo "Driftctl binary not downloaded!"
             exit 1
