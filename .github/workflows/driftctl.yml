@@ -49,13 +49,14 @@ jobs:
             exit 1
           fi
 
-      - name: Check Working Directory
-        run: |
-          pwd
-          ls -la
 
+      # Step 4: Verify Driftctl Installation
+      - name: Verify Driftctl Installation
+        run: |
+          driftctl version
+
+      # Step 5: Run Driftctl Scan against AWS
       - name: Run Driftctl Scan
         run: |
-          echo "Running Driftctl scan..."
-          driftctl scan --from tfstate://terraform.tfstate  --to github+tf --output console://
-                
+          echo "Running Driftctl scan against AWS..."
+          driftctl scan --from tfstate://terraform.tfstate --to aws+tf --output console://
