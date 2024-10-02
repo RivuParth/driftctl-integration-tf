@@ -57,5 +57,5 @@ jobs:
       - name: Run Driftctl Scan
         run: |
           echo "Running Driftctl scan..."
-          driftctl scan --from tfstate://terraform.tfstate --to aws+tf --verbose
+          driftctl scan --from tfstate+s3://terraform.tfstate  --to github+tf --output console://
                 
