@@ -17,13 +17,18 @@ jobs:
       - name: Install Driftctl
         run: |
           curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64
-          # Verify the file size
-          ls -lh driftctl
-          # Check the contents of the file
-          file driftctl
           chmod +x driftctl
           sudo mv driftctl /usr/local/bin/
 
+      - name: Configure AWS Credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Verify Driftctl Installation
+        run: |
+          driftctl version
+
       - name: Run Driftctl Scan
         run: |
-          driftctl scan --from tfstate://terraform.tfstate --to aws+tf
+          driftctl scan --from tfstate://path/to/your/terraform.tfstate --to aws+tf
