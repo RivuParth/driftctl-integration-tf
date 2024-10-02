@@ -11,8 +11,8 @@ variable "bucket_name" {
   default     = "my-sample-bucket"
 }
 
-variable "region" {
-  description = "The AWS region to deploy resources in"
+variable "aws_region" {
+  description = "The AWS region to deploy resources"
   type        = string
-  default     = "us-east-1" # Change this to your preferred region
+  default     = "us-west-2"  # Set your preferred region
 }
