@@ -1,0 +1,25 @@
+name: Driftctl Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  driftctl:
+    name: Run Driftctl
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Driftctl
+        run: |
+          curl -L https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64 -o driftctl
+          chmod +x driftctl
+          sudo mv driftctl /usr/local/bin/
+
+      - name: Run Driftctl Scan
+        run: |
+          driftctl scan --from tfstate://terraform.tfstate --to aws+tf
