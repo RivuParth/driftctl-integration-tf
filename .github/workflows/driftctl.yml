@@ -20,12 +20,26 @@ jobs:
         run: |
           # Download the Driftctl binary
           curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64
+          
           # Verify the file was downloaded
-          ls -l driftctl
+          if [ ! -f driftctl ]; then
+            echo "Driftctl binary not downloaded!"
+            exit 1
+          fi
+
+          # Check the file size to ensure it's not empty
+          FILESIZE=$(stat -c%s "driftctl")
+          if [ "$FILESIZE" -lt 100 ]; then
+            echo "Downloaded Driftctl binary is too small: ${FILESIZE} bytes. Possible download error."
+            exit 1
+          fi
+
           # Make it executable
           chmod +x driftctl
+
           # Move it to a local bin directory
           sudo mv driftctl /usr/local/bin/
+
           # Verify if Driftctl is in PATH
           echo "Verifying Driftctl installation..."
           if ! command -v driftctl &> /dev/null; then
