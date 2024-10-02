@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Plan and Apply
+    name: Terraform Plan and Applyy
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +36,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
+
+    
