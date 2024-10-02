@@ -26,6 +26,12 @@ jobs:
           chmod +x driftctl
           # Move it to a local bin directory
           sudo mv driftctl /usr/local/bin/
+          # Verify if Driftctl is in PATH
+          echo "Verifying Driftctl installation..."
+          if ! command -v driftctl &> /dev/null; then
+            echo "Driftctl installation failed: driftctl command not found"
+            exit 1
+          fi
 
       # Step 3: Configure AWS Credentials
       - name: Configure AWS Credentials
@@ -37,9 +43,8 @@ jobs:
       # Step 4: Verify Driftctl Installation
       - name: Verify Driftctl Installation
         run: |
-          # Check if Driftctl is executable
-          which driftctl
-          driftctl version
+          echo "Checking Driftctl version..."
+          driftctl version || (echo "Driftctl command failed"; exit 1)
 
       # Step 5: Run Driftctl Scan
       - name: Run Driftctl Scan
