@@ -17,6 +17,10 @@ jobs:
       - name: Install Driftctl
         run: |
           curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64
+          # Verify the file size
+          ls -lh driftctl
+          # Check the contents of the file
+          file driftctl
           chmod +x driftctl
           sudo mv driftctl /usr/local/bin/
 
