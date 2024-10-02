@@ -1,0 +1,36 @@
+name: Driftctl Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  driftctl:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
+
+    - name: Install Driftctl
+      run: |
+        curl -LO https://github.com/snyk/driftctl/releases/download/v0.23.0/driftctl_linux_amd64
+        chmod +x driftctl_linux_amd64
+        sudo mv driftctl_linux_amd64 /usr/local/bin/driftctl
+
+    - name: Initialize Terraform
+      run: |
+        cd terraform
+        terraform init
+
+    - name: Run Driftctl Scan
+      run: |
+        cd terraform
+        driftctl scan --from tfstate+s3://test334/tfstate
