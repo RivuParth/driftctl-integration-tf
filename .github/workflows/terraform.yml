@@ -1,4 +1,4 @@
-name: Terraform Workflow
+name: Terraform Workflow with Driftctl
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Plan and Applyy
+    name: Terraform Plan, Apply, and Driftctl
     runs-on: ubuntu-latest
 
     steps:
@@ -37,4 +37,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
 
-    
+      # Driftctl Integration
+      - name: Install Driftctl
+        run: |
+          curl -L https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64 -o driftctl
+          chmod +x driftctl
+          sudo mv driftctl /usr/local/bin/
+
+      - name: Run Driftctl Scan
+        run: |
+          driftctl --from tfstate://terraform.tfstate --to aws+tf --config-dir .driftctl
