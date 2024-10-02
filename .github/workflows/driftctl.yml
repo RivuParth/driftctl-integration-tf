@@ -1,4 +1,4 @@
-name: Terraform Drift Detection
+name: Driftctl AWS Scan
 
 on:
   push:
@@ -6,49 +6,32 @@ on:
       - main
 
 jobs:
-  driftctl:
+  scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      # Step 1: Checkout your repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
+      # Step 2: Set up AWS credentials
       - name: Set up AWS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}  # Ensure to set this in your secrets
+          AWS_REGION: ${{ secrets.AWS_REGION }}  # Add this line
         run: |
-          # Create the .aws directory
           mkdir -p ~/.aws
-          # Configure AWS credentials
           echo "[default]" > ~/.aws/config
-          echo "region = ${AWS_REGION}" >> ~/.aws/config  # Add the region
           echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> ~/.aws/config
           echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/config
-      
+          echo "region = ${AWS_REGION}" >> ~/.aws/config  # Add region to config
 
-      - name: Download Driftctl binary
+      # Step 3: Download and Install Driftctl
+      - name: Download Driftctl
         run: |
-          echo "Downloading Driftctl..."
-          curl -L https://github.com/snyk/driftctl/releases/latest/download/driftctl_linux_amd64 -o driftctl || { echo "Failed to download Driftctl"; exit 1; }
-          if [ ! -f driftctl ]; then
-            echo "Driftctl binary not downloaded!"
-            exit 1
-          fi
-          FILESIZE=$(stat -c%s "driftctl")
-          if [ "$FILESIZE" -lt 100 ]; then
-            echo "Downloaded Driftctl binary is too small: ${FILESIZE} bytes. Possible download error."
-            exit 1
-          fi
+          curl -Lo driftctl curl -L https://github.com/snyk/driftctl/releases/latest/download/driftctl_linux_amd64 -o driftctl 
           chmod +x driftctl
           sudo mv driftctl /usr/local/bin/
-          echo "Verifying Driftctl installation..."
-          if ! command -v driftctl &> /dev/null; then
-            echo "Driftctl installation failed: driftctl command not found"
-            exit 1
-          fi
-
 
       # Step 4: Verify Driftctl Installation
       - name: Verify Driftctl Installation
