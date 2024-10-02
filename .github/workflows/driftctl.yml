@@ -18,8 +18,13 @@ jobs:
       # Step 2: Install Driftctl
       - name: Install Driftctl
         run: |
+          # Download the Driftctl binary
           curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64
+          # Verify the file was downloaded
+          ls -l driftctl
+          # Make it executable
           chmod +x driftctl
+          # Move it to a local bin directory
           sudo mv driftctl /usr/local/bin/
 
       # Step 3: Configure AWS Credentials
@@ -32,6 +37,8 @@ jobs:
       # Step 4: Verify Driftctl Installation
       - name: Verify Driftctl Installation
         run: |
+          # Check if Driftctl is executable
+          which driftctl
           driftctl version
 
       # Step 5: Run Driftctl Scan
