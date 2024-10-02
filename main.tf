@@ -9,9 +9,12 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"  # Adjust to your desired region
+  region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "sample_bucket" {
-  bucket = "my-sample-bucket-12345"  # Change the bucket name to something unique
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "my-sample-bucket-22w"
+  acl    = "private"
 }
+
+
