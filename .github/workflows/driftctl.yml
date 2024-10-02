@@ -11,24 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Step 2: Install Driftctl
       - name: Install Driftctl
         run: |
           curl -Lo driftctl https://github.com/snyk/driftctl/releases/latest/download/driftctl-linux-amd64
           chmod +x driftctl
           sudo mv driftctl /usr/local/bin/
 
+      # Step 3: Configure AWS Credentials
       - name: Configure AWS Credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: echo "AWS credentials set"
 
+      # Step 4: Verify Driftctl Installation
       - name: Verify Driftctl Installation
         run: |
           driftctl version
 
+      # Step 5: Run Driftctl Scan
       - name: Run Driftctl Scan
         run: |
           driftctl scan --from tfstate://path/to/your/terraform.tfstate --to aws+tf
